@@ -19,5 +19,11 @@
  */
 package com.paypal.genio
 
-class Parser
+import org.json4s.JsonAST.JValue
 
+import scala.io.Source
+
+class Parser{
+  def readFile (fileName:String) = Source.fromURL(getClass.getResource(fileName)).getLines().mkString
+  
+}

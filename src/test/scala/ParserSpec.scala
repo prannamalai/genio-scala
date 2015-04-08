@@ -22,6 +22,7 @@ package com.paypal.genio.spec
 
 import java.io.File
 
+import com.paypal.genio.Parser
 import org.json4s._
 import org.json4s.native.JsonMethods._
 import org.scalatest.FunSpec
@@ -31,19 +32,11 @@ import scala.io.Source
 
 class ParserSpec extends FunSpec {
 
-  // TODO: Remove the default passing test case
-
-
-  describe("Adding 1 to 1") {
-    it("should equals 2") {
-      assert(1 + 1 == 2)
-    }
-  }
-
   describe("Reading a JSON File") {
     it("shouldn't be empty") {
-      val source = Source.fromURL(getClass.getResource("/sample-gdf.json")).getLines().mkString
-      assert(parse(source) != null)
+      val source = new Parser
+      val fileData = source.readFile("/sample-gdf.json")
+      assert(fileData != null)
     }
   }
 
