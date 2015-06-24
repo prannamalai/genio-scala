@@ -18,9 +18,11 @@ In memory representation:
                  * ...
 
 		 * Paths:  
-			 * Path:  
-				 * List[Method]  
-				 * List[Path]  
+			 * List[Path]
+
+		 * Path:
+			 * List[Method]  
+			 * List[Path]  
 
 		 * Method:  
 			 * verb/httpMethod  
@@ -39,11 +41,11 @@ In memory representation:
 
 		 * Schemas(Hashmap):  
 			 * name 
-			 	* schema(Hashmap):  
-                	 * objects
-                	 	 * List[Property]  
-                	 *arrays
-                	 	 * List[Property]  
+			 * schema(Hashmap):  
+               	 * objects
+               	 	 * List[Property]  
+               	 *arrays
+               	 	 * List[Property]  
 
 		 * Param:  
 			 * Name  
