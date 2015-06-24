@@ -3,24 +3,34 @@
  */
 package com.paypal.genio
 
-class Type extends Enumeration {
-  type Type = Value
+class ValueType extends Enumeration {
+  type ValueType = Value
   val String, Integer, Object, Array = Value
 }
 
-case class Property(name:String, propertyType:Type)
-case class Param(name:String, paramType:Type)
+class MethodParamKey extends Enumeration {
+  type MethodParamKey = Value
+  val Query, Path = Value
+}
 
-case class Method(httpMethod: String, params: Map[List[Param], List[Param]] )
+class SchemaPropertyKey extends Enumeration {
+  type SchemaPropertyKey = Value
+  val Objects, Arrays = Value
+}
+
+case class Property(name:String, propertyType:ValueType)
+case class Param(name:String, paramType:ValueType)
+
+case class Method(httpMethod: String, params: Map[MethodParamKey, List[Param]] )
 
 case class Path(methods: List[Method], paths:List[Path])
 case class Paths(paths: List[Path])
 
-case class RequestBody(schemaref: String)
+case class RequestBody(schemaRef: String)
 
 case class Responses(response: Map[Int,String])
 
-case class Schema(schema: Map[List[Property], List[Property]])
+case class Schema(schema: Map[SchemaPropertyKey, List[Property]])
 case class Schemas(schemas: Map[String, Schema])
 
 class TemplateCaseClasses {
