@@ -20,14 +20,8 @@
 
 package com.paypal.genio.spec
 
-import java.io.File
-
 import com.paypal.genio.Parser
-import org.json4s._
-import org.json4s.native.JsonMethods._
 import org.scalatest.FunSpec
-
-import scala.io.Source
 
 
 class ParserSpec extends FunSpec {
