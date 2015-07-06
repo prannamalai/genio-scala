@@ -2,13 +2,6 @@ package com.paypal.genio
 /**
  * Created by akgoel on 03/07/15.
  */
-trait Service {
-  def serviceName():String
-  def servicePath():String
-  def serviceRoot():String
-  def schemas():Map[String, Schema]
-  def resources():Map[String, Resource]
-}
 
 sealed abstract class SchemaType
 case object SchemaTypeString extends SchemaType
@@ -34,11 +27,38 @@ case object SchemaLocationQuery extends SchemaLocation
 case object SchemaLocationPath extends SchemaLocation
 
 class Schema(id:String, schemaType:SchemaType, description:String, required:Boolean, format:FormatType, location:SchemaLocation, properties:Map[String, Schema], items:Schema){
-  
+
 }
 
 class Resource()
 
-class Mapper {
+object Mapper {
+  def formatType(format:String) = format match {
+    case "int32" => FormatTypeInt32
+    case "uint32" => FormatTypeUInt32
+    case "double" => FormatTypeDouble
+    case "float" => FormatTypeFloat
+    case "byte" => FormatTypeByte
+    case "date" => FormatTypeDate
+    case "date-time" => FormatTypeDateTime
+    case "int64" => FormatTypeInt64
+    case "uint64" => FormatTypeUInt64
+    case _ => None
+  }
 
+  def schemaType(schemaType:String) = schemaType match {
+    case "string" => SchemaTypeString
+    case "number" => SchemaTypeNumber
+    case "integer" => SchemaTypeInteger
+    case "boolean" => SchemaTypeBoolean
+    case "object" => SchemaTypeObject
+    case "array" => SchemaTypeArray
+    case _ => None
+  }
+
+  def schemaLocation(schemaLocation:String) = schemaLocation match {
+    case "path" => SchemaLocationPath
+    case "query" => SchemaLocationQuery
+    case _ => None
+  }
 }

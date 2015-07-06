@@ -28,7 +28,7 @@ class ParserSpec extends FunSpec {
   describe("Reading a JSON File") {
     it("shouldn't be empty") {
 //      val source = new Parser
-//      val fileData = source.readFile("/sample-gdf.json")
+//      val fileData = source.readFile("/gdd.json")
 //      assert(fileData != null)
     }
   }

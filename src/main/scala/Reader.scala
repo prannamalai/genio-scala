@@ -27,7 +27,6 @@ import scala.io.Source
 sealed abstract class SpecType
 case object SpecTypeGDD extends SpecType
 case object SpecTypeSwagger extends SpecType
-case object SpecTypeInvalid extends SpecType
 
 class Reader{
   def readFile (fileName:String) = Source.fromURL(getClass.getResource(fileName)).getLines().mkString
@@ -38,9 +37,10 @@ class Reader{
     else if (parsedJson\"discoveryVersion" != JNothing)
       SpecTypeGDD
     else
-      SpecTypeInvalid
+      None
   }
   def specType(fileName:String) = {
-    findSpecType(parseJson(readFile(fileName)))
+    val parsedJson = parseJson(readFile(fileName))
+    (findSpecType(parsedJson), parsedJson)
   }
 }
