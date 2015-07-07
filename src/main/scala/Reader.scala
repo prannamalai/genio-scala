@@ -38,7 +38,7 @@ case object SpecFormatYAML extends SpecFormat
 
 class Reader{
   def readFile (fileName:String) = {
-    val content = Source.fromURL(getClass.getResource(fileName)).getLines().mkString
+    val content = Source.fromURL(getClass.getResource(fileName)).getLines().mkString("\n")
     fileName match {
       case file if file.endsWith("json") => (SpecFormatJSON, content)
       case file if file.endsWith("yaml") => (SpecFormatYAML, content)
