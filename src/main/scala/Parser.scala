@@ -7,37 +7,37 @@ import org.json4s.JsonAST.{JString, JObject, JValue}
  */
 
 trait Service {
-  def serviceName(): JValue
+  def serviceName(): String
 
-  def servicePath(): JValue
+  def servicePath(): String
 
-  def serviceRoot(): JValue
+  def serviceRoot(): String
 
   def schemas(): Map[String, Schema]
 
   def resources(): Map[String, Resource]
 }
 
-class ServiceGDD(parsedJson: JValue) extends Service {
-  override def serviceName():JValue = parsedJson \ "name"
+class ServiceGDD(parsedSpec: Map[String, Any]) extends Service {
+  override def serviceName():String = parsedSpec.get("name").get.asInstanceOf[String]
 
   override def resources(): Map[String, Resource] = ???
 
   override def schemas(): Map[String, Schema] = ???
 
-  override def servicePath(): JValue = parsedJson \ "servicePath"
+  override def servicePath(): String = parsedSpec.get("servicePath").get.asInstanceOf[String]
 
-  override def serviceRoot(): JValue = parsedJson \ "rootUrl"
+  override def serviceRoot(): String = parsedSpec.get("rootUrl").get.asInstanceOf[String]
 }
 
-class ServiceSwagger(parsedJson: JValue) extends Service {
-  override def serviceName(): JValue = parsedJson \ "info" \ "title"
+class ServiceSwagger(parsedSpec: Map[String, Any]) extends Service {
+  override def serviceName(): String = parsedSpec.get("info").get.asInstanceOf[Map[String, Any]].get("title").get.asInstanceOf[String]
 
   override def resources(): Map[String, Resource] = ???
 
   override def schemas(): Map[String, Parameter] = ???
 
-  override def servicePath() = parsedJson \ "basePath"
+  override def servicePath():String = parsedSpec.get("basePath").get.asInstanceOf[String]
 
-  override def serviceRoot() = parsedJson \ "host"
+  override def serviceRoot():String = parsedSpec.get("host").get.asInstanceOf[String]
 }
