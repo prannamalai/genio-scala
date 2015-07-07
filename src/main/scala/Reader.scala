@@ -67,11 +67,11 @@ class Reader{
   }
 
   def specType(fileName:String) = {
-    val (specFormat, fileContent) = readFile(fileName)
+    val (specFormat, fileContent:String) = readFile(fileName)
     var parsedSpec:Map[String, Any] = null
     specFormat match {
-      case SpecFormatJSON => parsedSpec = parseJson(fileContent.asInstanceOf[String])
-      case SpecFormatYAML => parsedSpec = parseYaml(fileContent.asInstanceOf[String])
+      case SpecFormatJSON => parsedSpec = parseJson(fileContent)
+      case SpecFormatYAML => parsedSpec = parseYaml(fileContent)
       case _ => None
     }
     (findSpecType(parsedSpec), parsedSpec)

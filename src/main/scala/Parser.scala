@@ -31,7 +31,7 @@ class ServiceGDD(parsedSpec: Map[String, Any]) extends Service {
 }
 
 class ServiceSwagger(parsedSpec: Map[String, Any]) extends Service {
-  override def serviceName(): String = parsedSpec.get("info").get.asInstanceOf[Map[String, Any]].get("title").get.asInstanceOf[String]
+  override def serviceName(): String = Utils.readMapEntity(parsedSpec, "info.title")
 
   override def resources(): Map[String, Resource] = ???
 
