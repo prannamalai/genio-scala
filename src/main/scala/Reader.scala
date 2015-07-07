@@ -19,28 +19,61 @@
  */
 package com.paypal.genio
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.json4s.JsonAST.{JNothing, JField, JValue}
 import org.json4s.native.JsonParser
+import org.yaml.snakeyaml.Yaml
 
 import scala.io.Source
 
 sealed abstract class SpecType
 case object SpecTypeGDD extends SpecType
 case object SpecTypeSwagger extends SpecType
-case object SpecTypeInvalid extends SpecType
+
+sealed abstract class SpecFormat
+case object SpecFormatJSON extends SpecFormat
+case object SpecFormatYAML extends SpecFormat
 
 class Reader{
-  def readFile (fileName:String) = Source.fromURL(getClass.getResource(fileName)).getLines().mkString
-  def parseJson (json:String) = JsonParser.parse(json)
-  def findSpecType (parsedJson:JValue) = {
-    if(parsedJson\"swagger" != JNothing)
+  def readFile (fileName:String) = {
+    val content = Source.fromURL(getClass.getResource(fileName)).getLines().mkString
+    fileName match {
+      case file if file.endsWith("json") => (SpecFormatJSON, content)
+      case file if file.endsWith("yaml") => (SpecFormatYAML, content)
+      case _ => None
+    }
+  }
+
+  def parseJson (json:String) = {
+    implicit val formats = org.json4s.DefaultFormats
+    JsonParser.parse(json).extract[Map[String, Any]]
+  }
+
+  def parseYaml (yaml:String) = {
+    val parser = new ObjectMapper(new YAMLFactory())
+    parser.registerModule(DefaultScalaModule)
+    parser.readValue(yaml, classOf[Map[String, Any]])
+  }
+
+  def findSpecType (parsedSpec:Map[String, Any]) = {
+    if(parsedSpec.get("swagger") != None)
       SpecTypeSwagger
-    else if (parsedJson\"discoveryVersion" != JNothing)
+    else if (parsedSpec.get("discoveryVersion") != None)
       SpecTypeGDD
     else
-      SpecTypeInvalid
+      None
   }
+
   def specType(fileName:String) = {
-    findSpecType(parseJson(readFile(fileName)))
+    val (specFormat, fileContent) = readFile(fileName)
+    var parsedSpec:Map[String, Any] = null
+    specFormat match {
+      case SpecFormatJSON => parsedSpec = parseJson(fileContent.asInstanceOf[String])
+      case SpecFormatYAML => parsedSpec = parseYaml(fileContent.asInstanceOf[String])
+      case _ => None
+    }
+    (findSpecType(parsedSpec), parsedSpec)
   }
 }
